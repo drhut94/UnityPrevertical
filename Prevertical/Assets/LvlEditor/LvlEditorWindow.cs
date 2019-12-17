@@ -9,18 +9,20 @@ public class LvlEditorWindow : Editor
 {
     //SerializedProperty lookAtPoint;
     SerializedProperty prefabs;
+    LvlEditor lvlEditor;
+    bool placeholderActivated;
 
     // Start is called before the first frame update
     void OnEnable() {
         //lookAtPoint = serializedObject.FindProperty("lookAtPoint");
         prefabs = serializedObject.FindProperty("prefabs");
-        EditorWindow.
+        
     }
 
    
     public override void OnInspectorGUI() {
 
-        LvlEditor lvlEditor = (LvlEditor)target;
+        lvlEditor = (LvlEditor)target;
 
         EditorGUILayout.Space(20);
         GUI.backgroundColor = lvlEditor.isActive ? Color.red : Color.green;
@@ -78,8 +80,22 @@ public class LvlEditorWindow : Editor
     }
 
     private void OnSceneGUI() {
-        if (Event.current.type == EventType.Layout) {
-            HandleUtility.AddDefaultControl(0);
+        if (lvlEditor.isActive) {
+            if (Event.current.type == EventType.MouseDown) {
+                //Ray ray = Camera.current.ScreenPointToRay(Event.current.mousePosition);
+                Ray ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
+                RaycastHit hit = new RaycastHit();
+                if (Physics.Raycast(ray, out hit, 1000.0f) && !placeholderActivated) {
+                    Debug.Log("RayHit");
+                    Instantiate(lvlEditor.prefabs[0], hit.collider.gameObject.transform.position + hit.normal.normalized, Quaternion.identity);
+                    placeholderActivated = true;
+                }
+                else {
+                    placeholderActivated = false;
+                }
+            }
         }
     }
+
+    
 }

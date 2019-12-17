@@ -14,7 +14,6 @@ public class LvlEditor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(lookAtPoint);
         init = false;
     }
 
