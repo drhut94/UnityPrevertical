@@ -8,6 +8,7 @@ public class CharacterController : MonoBehaviour
     public float horizontalInput;
     public float verticalInput;
     public bool jumpInput;
+    private bool wantsToJump;
     private bool horizontalDown;
     private bool verticalDown;
     Transform camTransform;
@@ -79,8 +80,10 @@ public class CharacterController : MonoBehaviour
     }
 
     void Jump() {
-        if (jumpInput) {
+        
+        if (wantsToJump) {
             rb.AddForce(normalVector * jumpForce, ForceMode.Impulse);
+            wantsToJump = false;
         }
     }
     
@@ -95,7 +98,9 @@ public class CharacterController : MonoBehaviour
         camForward.Normalize();
         camRight.Normalize();
 
-        jumpInput = Input.GetKeyDown(KeyCode.Space);
+        if (Input.GetButtonDown("Jump")) {
+            wantsToJump = true;
+        }
         if(horizontalInput != 0) {
             horizontalDown = true;
         }
