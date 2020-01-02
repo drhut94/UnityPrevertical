@@ -5,10 +5,10 @@ using UnityEditor;
 
 [CustomEditor(typeof(LvlEditor))]
 [CanEditMultipleObjects]
-public class LvlEditorWindow : Editor
-{
+public class LvlEditorWindow : Editor {
     //SerializedProperty lookAtPoint;
     SerializedProperty prefabs;
+
     LvlEditor lvlEditor;
     bool placeholderActivated;
 
@@ -16,11 +16,13 @@ public class LvlEditorWindow : Editor
     void OnEnable() {
         //lookAtPoint = serializedObject.FindProperty("lookAtPoint");
         prefabs = serializedObject.FindProperty("prefabs");
-        
+
     }
 
-   
+
     public override void OnInspectorGUI() {
+
+        DrawDefaultInspector();
 
         lvlEditor = (LvlEditor)target;
 
@@ -45,7 +47,7 @@ public class LvlEditorWindow : Editor
                 GUILayout.BeginHorizontal("box");
 
                 if (GUILayout.Button(prefab.name, GUILayout.Height(110), GUILayout.Width(110))) {
-                    
+
                 }
 
                 GUILayout.EndHorizontal();
@@ -62,7 +64,7 @@ public class LvlEditorWindow : Editor
                 lvlEditor.DisableSettings();
             else
                 lvlEditor.EnableSettings();
-            
+
         }
 
         GUI.backgroundColor = Color.white;
@@ -70,9 +72,9 @@ public class LvlEditorWindow : Editor
         if (lvlEditor.settings) {
 
 
-            EditorGUILayout.PropertyField(prefabs);        
+            EditorGUILayout.PropertyField(prefabs);
         }
-        
+
 
         serializedObject.Update();
         //EditorGUILayout.PropertyField(lookAtPoint);
@@ -97,5 +99,5 @@ public class LvlEditorWindow : Editor
         }
     }
 
-    
+
 }
