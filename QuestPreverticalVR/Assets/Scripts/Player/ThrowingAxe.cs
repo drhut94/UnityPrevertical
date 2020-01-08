@@ -49,15 +49,16 @@ public class ThrowingAxe : MonoBehaviour
 
     IEnumerator ThrowAxe() {
         while (isThrowing) {
-            rb.velocity = -transform.right * throwSpeed;
-            childModel.transform.Rotate(0,throwSpeed * 4,0);
+            rb.velocity = -transform.right * throwSpeed * 1.2f;
+            childModel.transform.Rotate(0,throwSpeed * 7,0);
+            transform.rotation = hand.axeOffset.transform.rotation;
             yield return null;
         }
     }
 
     private IEnumerator AxeReturnToHand() {
         while(Vector3.Distance(transform.position, hand.axeOffset.transform.position) > 0.1f) {
-            rb.transform.position = Vector3.MoveTowards(transform.position, handGameobject.transform.position, 0.1f);
+            rb.transform.position = Vector3.MoveTowards(transform.position, handGameobject.transform.position, 0.2f);
             yield return null;
         }
         transform.position = hand.axeOffset.transform.position;
@@ -65,4 +66,13 @@ public class ThrowingAxe : MonoBehaviour
         hand.GrabbAxe();
         childModel.transform.rotation = hand.axeOffset.transform.rotation;
     }
+
+    private void OnTriggerEnter(Collider other) {
+        rb.isKinematic = true;
+        isThrowing = false;
+
+        CubeCut.Cut(other.transform, transform.position);
+    }
+
+
 }
