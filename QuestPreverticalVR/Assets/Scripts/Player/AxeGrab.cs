@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Tayx.Graphy;
 
 public class AxeGrab : MonoBehaviour
 {
@@ -14,8 +14,9 @@ public class AxeGrab : MonoBehaviour
     [HideInInspector]
     public float speed;
 
-
+    private bool showUI;
     private ThrowingAxe axe;
+    private OVRCameraRig rig;
     //private FixedJoint fJoint;
     
 
@@ -23,6 +24,7 @@ public class AxeGrab : MonoBehaviour
         axe = axeGameobject.GetComponent<ThrowingAxe>();
         axe.handGameobject = this.gameObject;
         rb = GetComponent<Rigidbody>();
+        rig = FindObjectOfType<OVRCameraRig>();
         //fJoint = GetComponent<FixedJoint>();
     }
 
@@ -39,13 +41,29 @@ public class AxeGrab : MonoBehaviour
                 axe.Throw();
             }
         }
+
+        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch)) {
+            showUI = !showUI;
+            if (showUI) {
+                DebugUIBuilder.instance.Show();
+                GraphyManager.Instance.Enable();
+            }
+            else {
+                DebugUIBuilder.instance.Hide();
+                GraphyManager.Instance.Disable();
+            }
+
+        }
         //Debug.Log(OVRInput.GetLocalControllerVelocity(controller).magnitude);
-        
+
+        GraphyManager.Instance.transform.position = rig.transform.TransformPoint(0, 0, 4);
+        GraphyManager.Instance.transform.rotation = rig.transform.rotation;
     }
 
     public void GrabbAxe() {
         axeGameobject.transform.parent = this.transform;
         axe.rb.isKinematic = true;
+
         //fJoint.connectedBody = axeGameobject.GetComponent<Rigidbody>();
     }
 

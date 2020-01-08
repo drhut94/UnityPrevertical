@@ -11,6 +11,9 @@ public class ThrowingAxe : MonoBehaviour
     [HideInInspector]
     public bool isThrowing;
 
+    public GameObject tRenderer;
+    public ColorType.color color;
+
     private AxeGrab hand;
     private float throwSpeed;
     private GameObject childModel;
@@ -19,6 +22,7 @@ public class ThrowingAxe : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         isThrowing = true;
         childModel = transform.GetChild(0).gameObject;
+        tRenderer.SetActive(false);
     }
 
     public void Start() {
@@ -29,7 +33,7 @@ public class ThrowingAxe : MonoBehaviour
         rb.useGravity = false;
         StartCoroutine(AxeReturnToHand());
         isThrowing = false;
-        
+        tRenderer.SetActive(false);
     }
 
     public void StopReturnToHand() {
@@ -44,6 +48,7 @@ public class ThrowingAxe : MonoBehaviour
         //rb.AddForce(transform.right * -hand.speed, ForceMode.Impulse); 
         isThrowing = true;
         throwSpeed = hand.speed;
+        tRenderer.SetActive(true);
         StartCoroutine(ThrowAxe());
     }
 
@@ -71,7 +76,7 @@ public class ThrowingAxe : MonoBehaviour
         rb.isKinematic = true;
         isThrowing = false;
 
-        CubeCut.Cut(other.transform, transform.position);
+        //CubeCut.Cut(other.transform, transform.position);
     }
 
 
