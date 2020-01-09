@@ -5,6 +5,8 @@ using Tayx.Graphy;
 
 public class AxeGrab : MonoBehaviour
 {
+    bool activated;
+
     public OVRInput.Controller controller;
     public GameObject axeGameobject;
     public GameObject axeOffset;
@@ -29,35 +31,42 @@ public class AxeGrab : MonoBehaviour
     }
 
     private void Update() {
-        speed = OVRInput.GetLocalControllerVelocity(controller).magnitude;
-        if (OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger, controller)) {
-            axe.ReturnToHand();
-        }
-
-        if (OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger, controller)) {
-            DropAxe();
-            //axe.StopReturnToHand();
-            if (speed > 1) {
-                axe.Throw();
-            }
-        }
-
-        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch)) {
-            showUI = !showUI;
-            if (showUI) {
-                DebugUIBuilder.instance.Show();
-                GraphyManager.Instance.Enable();
-            }
-            else {
-                DebugUIBuilder.instance.Hide();
-                GraphyManager.Instance.Disable();
+        if (activated) {
+            speed = OVRInput.GetLocalControllerVelocity(controller).magnitude;
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger, controller)) {
+                axe.ReturnToHand();
             }
 
-        }
-        //Debug.Log(OVRInput.GetLocalControllerVelocity(controller).magnitude);
+            if (OVRInput.GetUp(OVRInput.Button.PrimaryHandTrigger, controller)) {
+                DropAxe();
+                //axe.StopReturnToHand();
+                if (speed > 1) {
+                    axe.Throw();
+                }
+            }
 
-        GraphyManager.Instance.transform.position = rig.transform.TransformPoint(0, 0, 4);
-        GraphyManager.Instance.transform.rotation = rig.transform.rotation;
+            //if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch)) {
+            //    showUI = !showUI;
+            //    if (showUI) {
+            //        DebugUIBuilder.instance.Show();
+            //        GraphyManager.Instance.Enable();
+            //    }
+            //    else {
+            //        DebugUIBuilder.instance.Hide();
+            //        GraphyManager.Instance.Disable();
+            //    }
+
+            //}
+            ////Debug.Log(OVRInput.GetLocalControllerVelocity(controller).magnitude);
+
+            //GraphyManager.Instance.transform.position = rig.transform.TransformPoint(0, 0, 4);
+            //GraphyManager.Instance.transform.rotation = rig.transform.rotation;
+        }
+        
+    }
+
+    public void Activate() {
+        activated = true;
     }
 
     public void GrabbAxe() {

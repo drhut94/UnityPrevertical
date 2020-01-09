@@ -10,6 +10,8 @@ public class ThrowingAxe : MonoBehaviour
     public Rigidbody rb;
     [HideInInspector]
     public bool isThrowing;
+    public AudioSource audioThrow;
+    public AudioSource impactAudio;
 
     public GameObject tRenderer;
     public ColorType.color color;
@@ -34,6 +36,7 @@ public class ThrowingAxe : MonoBehaviour
         StartCoroutine(AxeReturnToHand());
         isThrowing = false;
         tRenderer.SetActive(false);
+        audioThrow.Stop();
     }
 
     public void StopReturnToHand() {
@@ -43,12 +46,15 @@ public class ThrowingAxe : MonoBehaviour
     }
 
     public void Throw() {
+
         rb.useGravity = false;
         Debug.Log("Throwwww");
         //rb.AddForce(transform.right * -hand.speed, ForceMode.Impulse); 
         isThrowing = true;
         throwSpeed = hand.speed;
         tRenderer.SetActive(true);
+        audioThrow.pitch = throwSpeed * 2;
+        audioThrow.Play();
         StartCoroutine(ThrowAxe());
     }
 
@@ -73,9 +79,10 @@ public class ThrowingAxe : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
+        audioThrow.Stop();
+        impactAudio.Play();
         rb.isKinematic = true;
         isThrowing = false;
-
         //CubeCut.Cut(other.transform, transform.position);
     }
 
