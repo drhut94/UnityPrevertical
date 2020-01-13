@@ -45,6 +45,7 @@ public class AxeGrab : MonoBehaviour
                 }
             }
 
+
             //if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch)) {
             //    showUI = !showUI;
             //    if (showUI) {
@@ -72,6 +73,9 @@ public class AxeGrab : MonoBehaviour
     public void GrabbAxe() {
         axeGameobject.transform.parent = this.transform;
         axe.rb.isKinematic = true;
+        //OVRInput.SetControllerVibration(1,1, controller);
+
+        Vibration.instance.Vibrate(0.4f, 500, controller);
 
         //fJoint.connectedBody = axeGameobject.GetComponent<Rigidbody>();
     }

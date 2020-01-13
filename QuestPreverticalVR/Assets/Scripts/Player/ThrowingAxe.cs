@@ -68,7 +68,7 @@ public class ThrowingAxe : MonoBehaviour
     }
 
     private IEnumerator AxeReturnToHand() {
-        while(Vector3.Distance(transform.position, hand.axeOffset.transform.position) > 0.1f) {
+        while(Vector3.Distance(transform.position, hand.axeOffset.transform.position) > 0.2f) {
             rb.transform.position = Vector3.MoveTowards(transform.position, handGameobject.transform.position, 0.2f);
             yield return null;
         }
@@ -79,10 +79,12 @@ public class ThrowingAxe : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        audioThrow.Stop();
-        impactAudio.Play();
-        rb.isKinematic = true;
-        isThrowing = false;
+        if (!other.CompareTag("Diana")) {
+            audioThrow.Stop();
+            impactAudio.Play();
+            rb.isKinematic = true;
+            isThrowing = false;
+        }
         //CubeCut.Cut(other.transform, transform.position);
     }
 

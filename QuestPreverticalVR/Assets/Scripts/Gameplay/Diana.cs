@@ -7,10 +7,13 @@ public class Diana : MonoBehaviour
 {
     public ColorType.color color;
     public Light light;
+    public ParticleSystem particles;
 
     public UnityEvent OnAxeThrow;
+    public bool hasBennActivated;
 
     public void Awake() {
+        hasBennActivated = false;
         //if(color == ColorType.color.ORANGE) {
         //    GetComponent<MeshRenderer>().material.color = new Color(255, 97, 29, 255);
         //    light.color = new Color(255, 97, 29, 255);
@@ -22,10 +25,30 @@ public class Diana : MonoBehaviour
     }
 
     private void OnTriggerEnter(Collider other) {
-        if(other.GetComponent<ThrowingAxe>() != null) {
-            if(other.GetComponent<ThrowingAxe>().color == color) {
-                OnAxeThrow.Invoke();
+        if (!hasBennActivated) {
+            if(other.CompareTag("Axe")) {
+                if(other.GetComponent<ThrowingAxe>() != null) {
+                    if (other.GetComponent<ThrowingAxe>().color == color) {
+                        OnAxeThrow.Invoke();
+                        particles.Play();
+                        hasBennActivated = true;
+                    }
+                }
+                else {
+                    if (other.gameObject.transform.parent.parent.GetComponent<ThrowingAxe>().color == color) {
+                        OnAxeThrow.Invoke();
+                        particles.Play();
+                        hasBennActivated = true;
+                    }
+                }
             }
         }
     }
+
+
+
+
+
+
+
 }
